@@ -1,5 +1,52 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* Define the new color palette and base styles using CSS variables */
+:root {
+  --font-sans: 'Inter', sans-serif;
+  
+  --bg-primary: #F5EFE6;      /* Very dark, almost black for main background */
+  --bg-secondary: #7F8CAA;   /* Slightly lighter for cards and sidebars */
+  --bg-tertiary: #4f89df;    /* For hovered items, borders */
+
+  --text-primary: #070808;   /* Light gray for primary text */
+  --text-secondary: #57626d; /* Muted gray for secondary text, subtitles */
+  --text-bright: #b16f6f;    /* Pure white for headings */
+
+  --accent-primary: #3f6bb3; /* A vibrant blue for buttons, links, highlights */
+  --accent-primary-hover: #2563EB;
+  
+  --border-color: #293444;
+
+  --success: #22c55e;
+  --danger: #ef4444;
+}
+
+/* Apply base styles and Tailwind directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Place any minimal custom globals below as needed. */
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar for a more integrated look */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: #2d3748;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #4a5568;
+}
+

@@ -1,188 +1,217 @@
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+/* General Page Layout */
+.page {
+  padding: 1rem 2rem;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .header {
-  font-size: 1.875rem; /* text-3xl */
-  font-weight: 700;
-  color: white;
-}
-
-.formCard {
-  background-color: #1f2937; /* gray-800 */
-  padding: 1.5rem;
-  border-radius: 0.5rem; /* rounded-lg */
-  border: 1px solid #374151; /* gray-700 */
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.formTitle {
-  font-size: 1.25rem; /* text-xl */
-  font-weight: 600;
-}
-
-.input,
-.textarea {
-  width: 100%;
-  padding: 0.75rem;
-  background-color: #374151; /* gray-700 */
-  border-radius: 0.375rem; /* rounded-md */
-  border: 1px solid #4b5563; /* gray-600 */
-  outline: none;
-  transition: box-shadow 0.2s, border-color 0.2s;
-}
-
-.input:focus,
-.textarea:focus {
-  border-color: #22d3ee; /* cyan-500 */
-  box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.4);
-}
-
-.textarea {
-  resize: vertical;
-  min-height: 60px;
-}
-
-.submitButton {
-  display: inline-flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1.5rem;
-  background-color: #0891b2; /* cyan-600 */
-  border-radius: 0.375rem; /* rounded-md */
-  font-weight: 600;
-  transition: background-color 0.2s;
-  cursor: pointer;
-  border: none;
-  color: white;
-  align-self: flex-start;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #374151; /* gray-700 */
 }
 
-.submitButton:hover {
+.header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+
+/* Add Project Button & Form */
+.addProjectBtn {
+  background-color: #0891b2; /* cyan-600 */
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.addProjectBtn:hover {
   background-color: #06b6d4; /* cyan-500 */
 }
 
-.submitButton:disabled {
-  background-color: #4b5563; /* gray-600 */
-  cursor: not-allowed;
+.addProjectForm {
+  background-color: #3a4b40; /* Darker version of card for contrast */
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 1rem;
+  animation: slideDown 0.3s ease-in-out;
+  border: 1px solid #4b5563;
 }
 
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.addProjectForm input {
+  flex-grow: 1;
+  background-color: #374151; /* gray-700 */
+  border: 1px solid #4b5563; /* gray-600 */
+  color: var(--text-primary);
+  padding: 0.75rem;
+  border-radius: 8px;
+}
+
+.addProjectForm button {
+  background-color: #0891b2; /* cyan-600 */
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Project List and Cards */
 .projectList {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 1.5rem;
 }
 
 .projectCard {
-  background-color: #1f2937; /* gray-800 */
-  padding: 1.5rem;
-  border-radius: 0.5rem; /* rounded-lg */
-  border: 1px solid #374151; /* gray-700 */
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  background-color: #9CAFAA; /*From your previous CSS*/
+  padding: 1rem;
+
+  border-radius: 0.5rem;
+  border: 1px solid #374151;
 }
 
-.cardHeader {
+.projectCardHeader {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
-.cardTitle {
-  font-size: 1.25rem; /* text-xl */
+.projectCardHeader h2 {
+  font-size: 1.5rem;
   font-weight: 700;
-  color: white;
+  color: rgb(17, 11, 11); /* From your previous CSS */
 }
 
-.cardDescription {
-  color: #9ca3af; /* gray-400 */
-  font-size: 0.875rem; /* text-sm */
+.deleteProjectBtn {
+    background: none;
+    border: none;
+    color: #4b5563;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: color 0.2s;
+}
+.deleteProjectBtn:hover {
+    color: #ef4444; /* red-500 */
 }
 
-.deleteButton {
-  color: #6b7280; /* gray-500 */
-  font-size: 0.75rem; /* text-xs */
-  font-weight: 600;
-  cursor: pointer;
-  background: none;
-  border: none;
-  transition: color 0.2s;
-}
-
-.deleteButton:hover {
-  color: #ef4444; /* red-500 */
-}
-
-.progressContainer {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.875rem; /* text-sm */
-  margin-bottom: 0.25rem;
-}
-
-.progressLabel {
-  font-weight: 500;
-  color: #d1d5db; /* gray-300 */
-}
-
-.progressText {
-  color: #9ca3af; /* gray-400 */
-}
-
-.progressBarTrack {
-  width: 100%;
-  background-color: #374151; /* gray-700 */
-  border-radius: 9999px;
-  height: 0.625rem; /* h-2.5 */
-}
-
-.progressBarFill {
-  background-color: #0891b2; /* cyan-600 */
-  height: 0.625rem; /* h-2.5 */
-  border-radius: 9999px;
-  transition: width 0.3s ease-in-out;
-}
-
-.subTaskList {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.subTaskItem {
+/* Task Item Styles (for nesting) */
+.taskItem {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  background-color: rgba(55, 65, 81, 0.5); /* gray-700/50 */
-  padding: 0.5rem;
-  border-radius: 0.375rem; /* rounded-md */
+  padding: 0.5rem 0.5rem;
+  margin-left: calc(var(--level, 0) * 2rem); /* Indentation for nesting */
+  transition: background-color 0.2s;
+  border-radius: 6px;
 }
 
-.checkbox {
-  width: 1rem;
-  height: 1rem;
-  border-radius: 0.25rem;
-  background-color: #4b5563; /* gray-600 */
-  border-color: #6b7280; /* gray-500 */
-  color: #0891b2; /* cyan-500 */
-  cursor: pointer;
+.taskItem:hover {
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
-.checkbox:focus {
-  ring: #0e7490; /* cyan-600 */
+.taskContent {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 }
 
-.subTaskTitle {
-  flex: 1;
+.taskText {
+  color: #1f2937; /* Darker text for readability on light card */
+  flex-grow: 1;
 }
 
-.subTaskTitleCompleted {
+.taskText.completed {
   text-decoration: line-through;
   color: #6b7280; /* gray-500 */
 }
+
+.taskActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.taskItem:hover .taskActions {
+  opacity: 1;
+}
+
+.taskActions button {
+  background: none;
+  border: none;
+  color: #4b5563;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 0.25rem;
+  transition: color 0.2s;
+}
+.taskActions button:hover {
+    color: #111827;
+}
+
+.addTaskBtn {
+    background-color: #6c7891;
+    font-size: 1rem;
+    font-weight: bold;
+}
+.addTaskBtn:hover {
+    color: #233c42 !important; /* Important to override parent hover */
+}
+
+.deleteTaskBtn:hover {
+    color: #ef4444 !important; /* Important to override parent hover */
+}
+
+/* Circular Checkbox */
+.checkbox {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #6b7280; /* gray-500 */
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.2s, border-color 0.2s;
+  flex-shrink: 0; /* Prevent checkbox from shrinking */
+}
+
+.checkbox:hover {
+    border-color: #0891b2; /* cyan-600 */
+}
+
+.checkbox:checked {
+  background-color: #0891b2;
+  border-color: #0891b2;
+}
+
+.checkbox:checked::after {
+  content: '✔';
+  font-size: 12px;
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+

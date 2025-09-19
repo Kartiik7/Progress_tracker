@@ -1,0 +1,204 @@
+/* --- Main Page Layout --- */
+.page {
+  width: 100%;
+  min-height: 100%;
+  padding: 2rem 2.5rem;
+  background: linear-gradient(135deg, #ff8a00 0%, #e52e71 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+}
+
+.inputForm {
+  display: flex;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  padding: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.input {
+  flex-grow: 1;
+  background: transparent;
+  border: none;
+  color: white;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  outline: none;
+}
+.input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.button {
+  background: white;
+  color: #e52e71;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 150ms ease;
+}
+.button:hover {
+  transform: scale(1.03);
+}
+.button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* --- Stats and Cards --- */
+.statsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.statCard {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.statLabel {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.statValue {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.difficultyCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.difficultyInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.difficultyValue {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* --- Circular Progress Bar --- */
+.progressCircle {
+  width: 80px;
+  height: 80px;
+  transform: rotate(-90deg);
+}
+
+.progressCircleBg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.2);
+}
+
+.progressCircleFg {
+  fill: none;
+  stroke: white;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.5s ease-out;
+}
+
+/* --- Submission Heatmap --- */
+.heatmap {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.heatmapTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.heatmapGrid {
+  display: grid;
+  grid-template-columns: repeat(53, 1fr);
+  grid-template-rows: repeat(7, 1fr);
+  gap: 3px;
+}
+
+.heatmapCell {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 2px;
+  background-color: rgba(255, 255, 255, 0.15);
+}
+.heatmapCell:hover .tooltip {
+  opacity: 1;
+  transform: translateY(-5px);
+}
+
+.heatmapCell[data-level='1'] { background-color: #ffd1b3; }
+.heatmapCell[data-level='2'] { background-color: #ffa366; }
+.heatmapCell[data-level='3'] { background-color: #ff751a; }
+.heatmapCell[data-level='4'] { background-color: #e65c00; }
+
+.tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  background: #333;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: all 150ms ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* --- Skeleton Loader --- */
+.skeleton {
+  background-color: rgba(255, 255, 255, 0.15);
+  animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  50% { opacity: 0.5; }
+}
+

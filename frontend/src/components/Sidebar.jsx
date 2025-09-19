@@ -1,27 +1,39 @@
 import { NavLink } from 'react-router-dom';
-import styles from './Sidebar.module.css'; // Import the new CSS module
+import styles from './Sidebar.module.css';
+
+// Reusable NavItem component for sidebar links
+function NavItem({ to, title, children }) {
+  return (
+    <NavLink 
+      to={to} 
+      end={to === "/"}
+      className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}
+      title={title}
+    >
+      {children}
+      <span className={styles.tooltip}>{title}</span>
+    </NavLink>
+  );
+}
 
 function Sidebar() {
-  // The logic for applying active class is now simpler
-  const getLinkClass = ({ isActive }) => isActive ? `${styles.link} ${styles.active}` : styles.link;
-
   return (
-    <nav className={styles.nav}>
-      <div className={styles.logo}>
-        <span>PT</span>
-      </div>
-      <div className={styles.linkGroup}>
-        <NavLink to="/" end className={getLinkClass} title="Home">🏠</NavLink>
-        <NavLink to="/calendar" className={getLinkClass} title="Calendar">📅</NavLink>
-        <NavLink to="/projects" className={getLinkClass} title="Projects">📋</NavLink>
-        <NavLink to="/coding" className={getLinkClass} title="Coding Stats">💻</NavLink>
-        <NavLink to="/leetcode" className={getLinkClass} title="LeetCode Stats">🔥</NavLink>
-        <NavLink to="/book" className={getLinkClass} title="Book Goal">📚</NavLink>
-      </div>
+    <aside className={styles.sidebar}>
+      <div className={styles.logo}>PT</div>
+      
+      <nav className={styles.nav}>
+        <NavItem to="/" title="Dashboard">🏠</NavItem>
+        <NavItem to="/tasks" title="To-Do List">✅</NavItem>
+        <NavItem to="/calendar" title="Calendar">📅</NavItem>
+        <NavItem to="/projects" title="Projects">🗂️</NavItem>
+        <NavItem to="/leetcode" title="LeetCode Stats">💻</NavItem>
+        <NavItem to="/bookshelf" title="Bookshelf">📚</NavItem>
+      </nav>
+      
       <div className={styles.footer}>
-        <NavLink to="/settings" className={getLinkClass} title="Settings">⚙️</NavLink>
+        <NavItem to="/settings" title="Settings">⚙️</NavItem>
       </div>
-    </nav>
+    </aside>
   );
 }
 

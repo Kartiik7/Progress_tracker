@@ -1,67 +1,87 @@
-.nav {
+.sidebar {
   width: 80px;
-  background-color: #1f2937; /* gray-800 */
+  background-color: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
-  padding: 1rem;
+  padding: 1.5rem 0;
   align-items: center;
-  border-right: 1px solid #374151; /* gray-700 */
 }
 
 .logo {
-  margin-bottom: 2rem;
-  font-size: 1.5rem; /* text-2xl */
-  font-weight: 800;
-  color: #22d3ee; /* cyan-400 */
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
+  border-radius: 0.75rem;
+  background: var(--accent-primary);
   display: grid;
   place-items: center;
-  background-color: rgba(34, 211, 238, 0.1);
-  border-radius: 12px;
+  color: white;
+  font-weight: 800;
+  font-size: 1.25rem;
+  margin-bottom: 2.5rem;
 }
 
-.linkGroup {
+.nav {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem; /* A bit more spacing */
+  gap: 0.75rem; /* Spacing between icons */
 }
 
-.link {
-  color: #9ca3af; /* gray-400 */
-  font-size: 1.75rem; /* Larger icons */
-  padding: 0.5rem;
-  border-radius: 10px;
-  transition: all 0.2s ease-in-out;
+.navLink {
   position: relative;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 0.75rem;
+  font-size: 1.5rem; /* Larger icons */
+  color: var(--text-secondary);
+  transition: all 0.2s ease-in-out;
 }
 
-.link:hover {
-  color: #22d3ee; /* cyan-400 */
-  background-color: rgba(34, 211, 238, 0.1);
-  transform: scale(1.1);
+.navLink:hover {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
 }
 
-/* Style for the active link */
+/* Style for the currently active link */
 .active {
-  color: #22d3ee; /* cyan-400 */
-  background-color: rgba(34, 211, 238, 0.15);
+  background-color: var(--accent-primary);
+  color: var(--text-bright);
 }
 
-.active::before {
-  content: '';
+.active:hover {
+  background-color: var(--accent-primary-hover);
+  color: var(--text-bright);
+}
+
+.tooltip {
   position: absolute;
-  left: -1rem; /* Aligns with the padding of the nav */
+  left: 110%;
   top: 50%;
   transform: translateY(-50%);
-  width: 4px;
-  height: 60%;
-  background-color: #22d3ee; /* cyan-400 */
-  border-radius: 0 4px 4px 0;
+  background-color: #1f2937;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  pointer-events: none; /* Allows clicks to pass through */
+  z-index: 10;
+}
+
+.navLink:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
 }
 
 
 .footer {
   margin-top: auto;
 }
+

@@ -1,0 +1,160 @@
+.page {
+  padding: 2rem;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.welcomeMessage {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #2f3a4f;
+}
+
+.welcomeSub {
+  font-size: 1.125rem;
+  color: #191c20;
+  margin-top: 0.25rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+  }
+}
+
+.card {
+  background-color: #9aaec7;
+  border: 1px solid #374151;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  color: #41464f;
+}
+
+.card h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.loading {
+  color: #20242c;
+  font-size: 1.125rem;
+  text-align: center;
+  padding: 4rem;
+}
+
+.listItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #374151;
+}
+
+.listItem:last-child {
+  border-bottom: none;
+}
+
+.itemName {
+  font-weight: 500;
+}
+
+.itemDate {
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+.emptyState {
+  color: #6b7280;
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.statItem {
+  background-color: #352b49;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.statValue {
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: #fdfeff;
+}
+
+.statLabel {
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+.bookProgress {
+    margin-top: 0.5rem;
+}
+
+.progress {
+    height: 0.75rem;
+    background-color: #5c5940;
+    border-radius: 9999px;
+    overflow: hidden;
+    margin: 0.5rem 0;
+}
+
+.progressBar {
+    height: 100%;
+    background-color: #079139;
+    transition: width 0.3s ease-in-out;
+}
+
+.progressText {
+    font-size: 0.875rem;
+    color: #9ca3af;
+    text-align: right;
+}
+
+/* Assigning grid spans */
+.focus {
+    grid-column: span 1 / span 1;
+}
+
+.deadlines {
+    grid-column: span 1 / span 1;
+}
+
+.stats {
+    grid-column: span 1 / span 1;
+}
+
+@media (min-width: 1024px) {
+    .focus {
+        grid-column: span 1 / span 1;
+        grid-row: span 2 / span 2;
+    }
+    .deadlines {
+        grid-column: span 1 / span 1;
+        grid-row: span 2 / span 2;
+    }
+    .stats {
+        grid-column: span 1 / span 1;
+        grid-row: span 1 / span 1;
+    }
+    .reading {
+        grid-column: span 1 / span 1;
+        grid-row: span 1 / span 1;
+    }
+}
