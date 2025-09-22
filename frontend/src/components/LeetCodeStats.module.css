@@ -1,204 +1,210 @@
-/* --- Main Page Layout --- */
+/* --- Main Page & Header --- */
 .page {
-  width: 100%;
-  min-height: 100%;
-  padding: 2rem 2.5rem;
-  background: linear-gradient(135deg, #ff8a00 0%, #e52e71 100%);
-  color: white;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  padding: 2rem;
+  height: 100%;
+  overflow-y: auto;
+  background: var(--bg-primary); /* Use theme background */
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
+  text-align: center;
 }
 
 .title {
-  font-size: 2rem;
+  font-size: 2.25rem;
   font-weight: 800;
-  letter-spacing: -0.05em;
+  color: var(--text-bright);
 }
 
-.inputForm {
-  display: flex;
-  gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 0.75rem;
-  padding: 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.input {
-  flex-grow: 1;
-  background: transparent;
-  border: none;
-  color: white;
-  padding: 0.5rem 0.75rem;
-  font-size: 1rem;
-  outline: none;
-}
-.input::placeholder {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.button {
-  background: white;
-  color: #e52e71;
-  border: none;
-  border-radius: 0.5rem;
-  padding: 0.5rem 1.25rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 150ms ease;
-}
-.button:hover {
-  transform: scale(1.03);
-}
-.button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-/* --- Stats and Cards --- */
-.statsContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.grid {
+/* --- Responsive Grid Layout for Stat Boxes --- */
+.statsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
 }
 
 .statCard {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 1rem;
+  background-color: var(--bg-secondary);
+  border-radius: 0.75rem;
   padding: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   gap: 0.5rem;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-.statLabel {
+.statCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.statTitle {
   font-size: 1rem;
-  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+  color: var(--text-secondary);
 }
 
 .statValue {
-  font-size: 2.25rem;
-  font-weight: 700;
-  line-height: 1;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-bright);
 }
 
-.difficultyCard {
+.statValueSmall {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.difficultyHeader {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
 }
 
-.difficultyInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+.progressBar {
+  width: 100%;
+  height: 8px;
+  background-color: var(--border-color);
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-top: 0.5rem;
 }
 
-.difficultyValue {
-  font-size: 1.75rem;
-  font-weight: 700;
-  line-height: 1;
+.progressFill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.5s ease-in-out;
 }
 
-/* --- Circular Progress Bar --- */
-.progressCircle {
-  width: 80px;
-  height: 80px;
-  transform: rotate(-90deg);
-}
 
-.progressCircleBg {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.2);
-}
-
-.progressCircleFg {
-  fill: none;
-  stroke: white;
-  stroke-linecap: round;
-  transition: stroke-dashoffset 0.5s ease-out;
-}
-
-/* --- Submission Heatmap --- */
-.heatmap {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 1rem;
+/* --- NEW HEATMAP / CONTRIBUTION GRAPH STYLES --- */
+.heatmapWrapper {
+  background-color: var(--bg-secondary);
+  border-radius: 0.75rem;
   padding: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
+  margin-top: 2rem;
 }
 
 .heatmapTitle {
   font-size: 1.25rem;
   font-weight: 700;
-  margin-bottom: 1rem;
+  color: var(--text-bright);
+  margin-bottom: 1.5rem;
 }
+
+.heatmapContainer {
+  overflow-x: auto; /* Contains scrolling to the graph area */
+  padding-bottom: 1rem;
+}
+
+.heatmap {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.heatmapMonths {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: repeat(53, 1fr); /* 53 weeks */
+  gap: 4px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  padding-left: 30px; /* Space for day labels */
+  text-align: left;
+}
+
+.heatmapBody {
+  display: flex;
+  gap: 10px;
+}
+
+.heatmapDays {
+  display: grid;
+  grid-template-rows: repeat(7, 14px); /* Cell height */
+  gap: 4px; /* Matches cell gap */
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  align-items: center;
+}
+.heatmapDays span:nth-child(odd) {
+  visibility: hidden;
+}
+
 
 .heatmapGrid {
   display: grid;
-  grid-template-columns: repeat(53, 1fr);
-  grid-template-rows: repeat(7, 1fr);
-  gap: 3px;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(7, 1fr); 
+  grid-gap: 4px;
 }
 
 .heatmapCell {
-  position: relative;
-  aspect-ratio: 1;
-  border-radius: 2px;
-  background-color: rgba(255, 255, 255, 0.15);
-}
-.heatmapCell:hover .tooltip {
-  opacity: 1;
-  transform: translateY(-5px);
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  transition: background-color 0.2s;
 }
 
-.heatmapCell[data-level='1'] { background-color: #ffd1b3; }
-.heatmapCell[data-level='2'] { background-color: #ffa366; }
-.heatmapCell[data-level='3'] { background-color: #ff751a; }
-.heatmapCell[data-level='4'] { background-color: #e65c00; }
+/* New green color scale for heatmap */
+.level0 { background-color: var(--border-color); }
+.level1 { background-color: #0e4429; }
+.level2 { background-color: #006d32; }
+.level3 { background-color: #26a641; }
+.level4 { background-color: #39d353; }
 
-.tooltip {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%) translateY(0);
-  background: #333;
+
+/* --- States (Loading, Error, Empty) --- */
+.emptyState, .loading {
+  text-align: center;
+  padding: 4rem 1rem;
+  background-color: var(--bg-secondary);
+  border-radius: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.emptyState h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-bright);
+}
+
+.emptyState p {
+    margin-top: 0.5rem;
+}
+
+.settingsLink {
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--accent-primary);
   color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  white-space: nowrap;
-  opacity: 0;
-  transition: all 150ms ease;
-  pointer-events: none;
-  z-index: 10;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.2s;
 }
 
-/* --- Skeleton Loader --- */
+.settingsLink:hover {
+  background-color: var(--accent-primary-hover);
+}
+
 .skeleton {
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: var(--border-color);
   animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  min-height: 120px;
 }
 
 @keyframes pulse {
-  50% { opacity: 0.5; }
+  50% {
+    opacity: .5;
+  }
 }
 

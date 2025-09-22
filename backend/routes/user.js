@@ -1,13 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/userController.js');
+const userController = require('../controllers/userController');
 const authMiddleware = require('../middleware/authMiddleware');
 
-// All routes in this file are protected
-router.use(authMiddleware);
+// Get user profile (including settings)
+router.get('/profile', authMiddleware, userController.getProfile);
 
-router.get('/profile', userController.getUserProfile);
-router.put('/settings', userController.updateUserSettings);
-router.post('/change-password', userController.changePassword);
+// Update user profile (settings)
+router.put('/profile', authMiddleware, userController.updateProfile);
+
+// Change user password
+router.post('/change-password', authMiddleware, userController.changePassword);
+
+// Verify user's current password
+router.post('/verify-password', authMiddleware, userController.verifyPassword);
 
 module.exports = router;
+

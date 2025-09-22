@@ -1,3 +1,5 @@
-import api from './client'
+import api from './client';
 
-export const getLeetCodeStats = (username) => api.get(`/leetcode/${username}`).then(r => r.data)
+// Fetches stats for the CURRENTLY LOGGED-IN user. No username needed.
+export const getLeetCodeStats = () => api.get('/leetcode').then(res => res.data);
+

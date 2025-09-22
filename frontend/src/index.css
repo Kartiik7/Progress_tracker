@@ -5,18 +5,18 @@
 :root {
   --font-sans: 'Inter', sans-serif;
   
-  --bg-primary: #F5EFE6;      /* Beige for main background */
-  --bg-secondary: #7F8CAA;    /* Blue-gray for cards and sidebars */
-  --bg-tertiary: #A6B1C9;      /* Lighter blue-gray for hovered items */
+  --bg-primary: #F5EFE6;      /* Main background */
+  --bg-secondary: #E8DFCA;    /* Card and component backgrounds */
+  --bg-tertiary: #AEBDCA;     /* Hover states */
 
-  --text-primary: #070808;    /* Black for primary text */
-  --text-secondary: #57626d;  /* Muted gray for secondary text */
-  --text-bright: #b16f6f;      /* Reddish-brown for headings */
+  --text-primary: #1E2022;     /* Dark text for primary content */
+  --text-secondary: #52616B;   /* Muted gray for secondary text */
+  --text-bright: #C92C6D;      /* Accent color for headings */
 
-  --accent-primary: #3f6bb3;  /* A vibrant blue for buttons, links, highlights */
-  --accent-primary-hover: #2563EB;
+  --accent-primary: #4A69BD;  /* A vibrant blue for buttons, links */
+  --accent-primary-hover: #3B528E;
   
-  --border-color: #D3D9E3;
+  --border-color: #C9D6DF;
 
   --success: #22c55e;
   --danger: #ef4444;
@@ -27,6 +27,12 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   font-family: var(--font-sans);
   background-color: var(--bg-primary);
@@ -34,6 +40,19 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* --- Core Application Layout --- */
+.app-layout {
+  display: flex;
+  height: 100vh; /* Full viewport height */
+}
+
+.app-content {
+  flex-grow: 1; /* Takes up the remaining space */
+  overflow-y: auto; /* Allows content to scroll independently */
+  height: 100vh;
+}
+
 
 /* Custom scrollbar for a more integrated look */
 ::-webkit-scrollbar {
@@ -43,10 +62,10 @@ body {
   background: var(--bg-primary);
 }
 ::-webkit-scrollbar-thumb {
-  background: #C4CCD9;
+  background: #C9D6DF;
   border-radius: 5px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--bg-secondary);
+  background: #AEBDCA;
 }
 

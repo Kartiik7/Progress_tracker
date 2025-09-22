@@ -1,107 +1,182 @@
+/* --- Settings Page Layout --- */
 .page {
-    padding: 2rem;
-    max-width: 800px;
-    margin: 0 auto;
-    color: #e5e7eb;
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.page h1 {
-    font-size: 2.25rem;
-    font-weight: 800;
-    margin-bottom: 2rem;
-    border-bottom: 1px solid #374151;
-    padding-bottom: 1rem;
+.title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--text-bright);
 }
 
 .card {
-    background-color: #1f2937;
-    border-radius: 0.75rem;
-    padding: 2rem;
-    margin-bottom: 2rem;
-    border: 1px solid #374151;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .card h2 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    color: #d1d5db;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  margin: 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
 }
 
-.form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
+/* --- Form Fields --- */
 .field {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .field label {
-    font-weight: 500;
-    color: #9ca3af;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
-.input {
-    background-color: #374151;
-    border: 1px solid #4b5563;
-    color: #e5e7eb;
-    padding: 0.75rem;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
+.field input {
+  padding: 0.75rem;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  color: var(--text-primary);
+  outline: none;
+  transition: box-shadow 0.2s, border-color 0.2s;
 }
 
-.input:focus {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+.field input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4); /* Tailwind's ring-blue-500 with opacity */
 }
 
+
+/* --- Buttons --- */
 .button {
-    background-color: #3b82f6;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    cursor: pointer;
-    border: none;
-    transition: background-color 0.2s;
-    align-self: flex-start;
-    /* Align button to the left */
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background-color: var(--accent-primary);
+  color: white;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  align-self: flex-start;
 }
 
 .button:hover {
-    background-color: #2563eb;
+  background-color: var(--accent-primary-hover);
 }
 
-.dangerButton {
-    background-color: #ef4444;
+.buttonSecondary {
+    background-color: var(--bg-tertiary);
 }
 
-.dangerButton:hover {
-    background-color: #dc2626;
+.danger {
+    background-color: var(--danger);
+}
+.danger:hover {
+    filter: brightness(1.1);
 }
 
-.success,
-.error {
-    padding: 1rem;
+
+/* --- Theme Selector --- */
+.themeSelector {
+    display: flex;
+    gap: 1rem;
+    background-color: var(--bg-primary);
+    padding: 0.5rem;
     border-radius: 0.5rem;
-    margin-bottom: 2rem;
-    font-weight: 500;
 }
 
-.success {
-    background-color: rgba(22, 163, 74, 0.2);
-    color: #22c55e;
-    border: 1px solid #22c55e;
+.themeButton {
+    flex: 1;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    border: none;
+    background-color: transparent;
+    color: var(--text-secondary);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.activeTheme {
+    background-color: var(--bg-secondary);
+    color: var(--text-bright);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* --- Messages --- */
+.message {
+  text-align: center;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: rgba(34, 197, 94, 0.1); /* success with opacity */
+  color: var(--success);
+  font-weight: 500;
 }
 
 .error {
-    background-color: rgba(239, 68, 68, 0.2);
-    color: #ef4444;
-    border: 1px solid #ef4444;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: rgba(239, 68, 68, 0.1); /* danger with opacity */
+  color: var(--danger);
+  font-weight: 500;
 }
+
+
+/* --- Password Verification Modal --- */
+.modalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: var(--bg-secondary);
+  padding: 2rem;
+  border-radius: 0.75rem;
+  width: 90%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modal h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  margin: 0;
+}
+
+.modal p {
+  color: var(--text-secondary);
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+

@@ -1,191 +1,240 @@
 import React, { useState, useEffect } from 'react';
 import { getLeetCodeStats } from '../api/leetcode';
 import styles from './LeetCodeStats.module.css';
+import { Link } from 'react-router-dom';
 
-// Main component for the LeetCode Stats page
 export default function LeetCodeStats() {
-  const [username, setUsername] = useState('example');
   const [stats, setStats] = useState(null);
-  const [loading, setLoading] = useState(true); // Start loading on initial mount
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Fetches stats when the user clicks the button or on initial load
-  const handleFetchStats = async (user) => {
-    if (!user) {
-      setError('Please enter a LeetCode username.');
-      return;
-    }
-    setError('');
-    setLoading(true);
-    setStats(null);
-    try {
-      const data = await getLeetCodeStats(user);
-      setStats(data);
-    } catch (err) {
-      const errorMessage = err.response?.data?.message || 'An unknown error occurred.';
-      setError(`Could not fetch stats for "${user}". ${errorMessage}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-  
-  // Auto-fetch stats for the default user on initial component load
   useEffect(() => {
-    handleFetchStats(username);
+    const fetchStats = async () => {
+      try {
+        setLoading(true);
+        setError('');
+        const data = await getLeetCodeStats();
+        setStats(data);
+      } catch (err) {
+        const errorMessage = err.response?.data?.message || 'An unexpected error occurred.';
+        setError(errorMessage);
+        console.error("Failed to fetch LeetCode stats:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStats();
   }, []);
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      handleFetchStats(username);
+  const renderContent = () => {
+    if (loading) {
+      return <SkeletonLoader />;
     }
+
+    if (error) {
+      return (
+        <div className={styles.emptyState}>
+          <h2>Error Fetching Stats</h2>
+          <p>{error}</p>
+          {error.includes("No LeetCode username is set") && (
+            <Link to="/app/settings" className={styles.settingsLink}>
+              Add your username in Settings
+            </Link>
+          )}
+        </div>
+      );
+    }
+    
+    if (!stats) {
+      return <div className={styles.emptyState}>No stats available.</div>;
+    }
+
+    return <StatsDisplay stats={stats} />;
   };
 
   return (
     <div className={styles.page}>
-      <div className={styles.header}>
-        <h1 className={styles.title}>LeetCode Stats</h1>
-        <div className={styles.inputForm}>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="faisalshohagprog"
-            className={styles.input}
-          />
-          <button onClick={() => handleFetchStats(username)} disabled={loading} className={styles.button}>
-            {loading ? '...' : 'Okay'}
-          </button>
-        </div>
+      <header className={styles.header}>
+        <h1 className={styles.title}>Your LeetCode Stats</h1>
+      </header>
+      <div className={styles.content}>
+        {renderContent()}
       </div>
-
-      {loading && <SkeletonLoader />}
-      {error && <div className={styles.error}>{error}</div>}
-      
-      {stats && (
-        <div className={styles.statsContainer}>
-          <div className={styles.grid}>
-            <StatCard label="Total Solved" value={`${stats.totalSolved} / ${stats.totalQuestions}`} percentage={(stats.totalSolved / stats.totalQuestions) * 100} />
-            <StatCard label="Ranking" value={stats.ranking?.toLocaleString() || 'N/A'} />
-            <StatCard label="Easy Solved" value={`${stats.easySolved} / ${stats.totalEasy}`} percentage={(stats.easySolved / stats.totalEasy) * 100} />
-            <StatCard label="Medium Solved" value={`${stats.mediumSolved} / ${stats.totalMedium}`} percentage={(stats.mediumSolved / stats.totalMedium) * 100} />
-            <StatCard label="Hard Solved" value={`${stats.hardSolved} / ${stats.totalHard}`} percentage={(stats.hardSolved / stats.totalHard) * 100} />
-            <StatCard label="Contribution Points" value={stats.contributionPoint} />
-          </div>
-          {stats.submissionCalendar && <Heatmap calendarData={stats.submissionCalendar} />}
-        </div>
-      )}
     </div>
   );
 }
 
-// --- Helper Components ---
 
-function StatCard({ label, value, percentage }) {
-  // A simple card for displaying a single value like Ranking
-  if (typeof percentage === 'undefined') {
-    return (
-        <div className={styles.statCard}>
-            <div className={styles.difficultyInfo}>
-                <span className={styles.statLabel}>{label}</span>
-                <span className={styles.statValue}>{value}</span>
-            </div>
-        </div>
-    );
-  }
+// --- UI Components ---
 
-  // A card that includes a circular progress bar
+function StatsDisplay({ stats }) {
+  const {
+    totalSolved,
+    totalQuestions,
+    easySolved,
+    totalEasy,
+    mediumSolved,
+    totalMedium,
+    hardSolved,
+    totalHard,
+    ranking,
+    contributionPoint,
+    submissionCalendar
+  } = stats;
+
+  return (
+    <>
+      <div className={styles.statsGrid}>
+        <StatCard title="Total Solved" value={`${totalSolved} / ${totalQuestions}`} />
+        <StatCard title="Ranking" value={ranking?.toLocaleString()} />
+        <StatCard title="Contribution Points" value={contributionPoint} />
+        <DifficultyCard title="Easy" solved={easySolved} total={totalEasy} color="#4ade80" />
+        <DifficultyCard title="Medium" solved={mediumSolved} total={totalMedium} color="#facc15" />
+        <DifficultyCard title="Hard" solved={hardSolved} total={totalHard} color="#f87171" />
+      </div>
+      <Heatmap data={submissionCalendar} />
+    </>
+  );
+}
+
+function StatCard({ title, value }) {
   return (
     <div className={styles.statCard}>
-      <div className={styles.difficultyInfo}>
-        <span className={styles.statLabel}>{label}</span>
-        <span className={styles.difficultyValue}>{value}</span>
-      </div>
-      <CircularProgress percentage={percentage} />
+      <span className={styles.statTitle}>{title}</span>
+      <span className={styles.statValue}>{value}</span>
     </div>
   );
 }
 
-function CircularProgress({ percentage }) {
-  const radius = 35;
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (percentage / 100) * circumference;
-
+function DifficultyCard({ title, solved, total, color }) {
+  const percentage = total > 0 ? (solved / total) * 100 : 0;
   return (
-    <svg className={styles.progressCircle} width="80" height="80" viewBox="0 0 80 80">
-      <circle className={styles.progressCircleBg} strokeWidth="8" cx="40" cy="40" r={radius} />
-      <circle
-        className={styles.progressCircleFg}
-        strokeWidth="8"
-        strokeDasharray={circumference}
-        strokeDashoffset={offset}
-        cx="40"
-        cy="40"
-        r={radius}
-      />
-    </svg>
+    <div className={styles.statCard}>
+      <div className={styles.difficultyHeader}>
+        <span className={styles.statTitle}>{title}</span>
+        <span className={styles.statValueSmall}>{solved} / {total}</span>
+      </div>
+      <div className={styles.progressBar}>
+        <div className={styles.progressFill} style={{ width: `${percentage}%`, backgroundColor: color }}></div>
+      </div>
+    </div>
   );
 }
 
-function Heatmap({ calendarData }) {
-    // API returns a stringified JSON, so we must parse it.
-    const submissions = typeof calendarData === 'string' ? JSON.parse(calendarData) : calendarData || {};
-  
-    // Create a map of date strings to submission counts for quick lookup
-    const dates = {};
-    for (const timestamp in submissions) {
-      const date = new Date(parseInt(timestamp) * 1000);
-      const dateString = date.toISOString().slice(0, 10);
-      dates[dateString] = submissions[timestamp];
+// --- NEW AND IMPROVED HEATMAP COMPONENT ---
+
+const getContributionLevel = (count, max) => {
+    if (count === 0) return styles.level0;
+    const percentage = count / max;
+    if (percentage > 0.7) return styles.level4;
+    if (percentage > 0.5) return styles.level3;
+    if (percentage > 0.3) return styles.level2;
+    return styles.level1;
+};
+
+const formatDate = (date) => {
+    return date.toISOString().split('T')[0];
+}
+
+function Heatmap({ data = {} }) {
+    const today = new Date();
+    const endDate = new Date(today);
+    const startDate = new Date(today);
+    startDate.setFullYear(today.getFullYear() - 1);
+    
+    const contributionsMap = new Map();
+    for (const [timestamp, count] of Object.entries(data)) {
+        const date = new Date(parseInt(timestamp, 10) * 1000);
+        contributionsMap.set(formatDate(date), count);
     }
-  
-    // Generate an array of all days in the last year
-    const endDate = new Date();
-    const days = [];
-    for (let i = 0; i < 371; i++) { // 53 weeks * 7 days
-        let day = new Date(endDate);
-        day.setDate(day.getDate() - (370 - i));
-        days.push(day);
+    const maxContribution = Math.max(...contributionsMap.values(), 1); // Avoid division by zero
+
+    const weeks = [];
+    let currentDate = new Date(startDate);
+    // Align start date to the previous Sunday
+    currentDate.setDate(currentDate.getDate() - startDate.getDay());
+
+    for (let i = 0; i < 53; i++) {
+        const week = [];
+        for (let j = 0; j < 7; j++) {
+            const dateStr = formatDate(currentDate);
+            const count = contributionsMap.get(dateStr) || 0;
+            const isVisible = currentDate >= startDate && currentDate <= endDate;
+
+            week.push({
+                date: dateStr,
+                count: count,
+                levelClass: getContributionLevel(count, maxContribution),
+                visible: isVisible,
+            });
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+        weeks.push(week);
     }
-  
-    // Determine the level of activity for coloring the cells
-    const getLevel = (count) => {
-        if (!count || count === 0) return 0;
-        if (count > 10) return 4;
-        if (count > 5) return 3;
-        if (count > 2) return 2;
-        return 1;
-    }
-  
+
+    const monthLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const monthLabelPositions = weeks.reduce((acc, week, i) => {
+      const firstDayOfMonth = new Date(week[0].date);
+      const month = firstDayOfMonth.getMonth();
+      if (!acc.some(item => item.month === month)) {
+        acc.push({ month, index: i });
+      }
+      return acc;
+    }, []);
+
     return (
-      <div className={styles.heatmap}>
-        <h2 className={styles.heatmapTitle}>Submission Heatmap</h2>
-        <div className={styles.heatmapGrid}>
-          {days.map((day, index) => {
-            const dateString = day.toISOString().slice(0, 10);
-            const count = dates[dateString] || 0;
-            const level = getLevel(count);
-            return (
-              <div key={index} className={styles.heatmapCell} data-level={level}>
-                <span className={styles.tooltip}>
-                  {count} submissions on {day.toLocaleDateString()}
-                </span>
+      <div className={styles.heatmapWrapper}>
+        <h3 className={styles.heatmapTitle}>Submission Heatmap (Last Year)</h3>
+        <div className={styles.heatmapContainer}>
+          <div className={styles.heatmap}>
+            <div className={styles.heatmapMonths}>
+              {monthLabelPositions.map(({ month, index }) => (
+                <div key={month} style={{ gridColumn: index + 1 }}>
+                  {monthLabels[month]}
+                </div>
+              ))}
+            </div>
+            <div className={styles.heatmapBody}>
+              <div className={styles.heatmapDays}>
+                <span>Mon</span>
+                <span></span>
+                <span>Wed</span>
+                <span></span>
+                <span>Fri</span>
+                <span></span>
+                <span></span>
               </div>
-            );
-          })}
+              <div className={styles.heatmapGrid}>
+                {weeks.map((week, weekIndex) => (
+                  <div key={weekIndex}>
+                    {week.map((day) => (
+                      <div
+                        key={day.date}
+                        className={`${styles.heatmapCell} ${day.visible ? day.levelClass : ''}`}
+                        title={day.visible ? `${day.count} submissions on ${day.date}` : ''}
+                        style={{ visibility: day.visible ? 'visible' : 'hidden' }}
+                      />
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
 }
 
-// Placeholder component for the loading state
+
 function SkeletonLoader() {
   return (
-    <div className={styles.statsContainer}>
-       <div className={styles.grid}>
-        {[...Array(6)].map((_, i) => <div key={i} className={`${styles.statCard} ${styles.skeleton}`} style={{height: '140px'}} />)}
-      </div>
-      <div className={`${styles.heatmap} ${styles.skeleton}`} style={{height: '220px'}} />
+    <div className={styles.statsGrid}>
+      <div className={`${styles.statCard} ${styles.skeleton}`}></div>
+      <div className={`${styles.statCard} ${styles.skeleton}`}></div>
+      <div className={`${styles.statCard} ${styles.skeleton}`}></div>
+      <div className={`${styles.statCard} ${styles.skeleton}`}></div>
+      <div className={`${styles.statCard} ${styles.skeleton}`}></div>
+      <div className={`${styles.statCard} ${styles.skeleton}`}></div>
     </div>
   );
 }
