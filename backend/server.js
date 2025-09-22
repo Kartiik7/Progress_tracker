@@ -25,6 +25,16 @@ app.use('/api/user', userRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/github', githubRoutes); // Use new GitHub routes
 
+// Root route for health check
+app.get('/', (req, res) => {
+  res.status(200).json({ 
+    message: 'Welcome to the StudyFlow API!',
+    status: 'Server is running successfully.' 
+  });
+});
+
+// ... your other API routes like app.use('/api/users', userRoutes) etc.
+
 const PORT = process.env.PORT || 5000;
 
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
