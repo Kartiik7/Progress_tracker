@@ -1,37 +1,42 @@
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styles from './Sidebar.module.css';
 
-// Reusable NavItem component for sidebar links
-function NavItem({ to, title, children }) {
-  return (
-    <NavLink 
-      to={to} 
-      end={to === "/"}
-      className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}
-      title={title}
-    >
-      {children}
-      <span className={styles.tooltip}>{title}</span>
-    </NavLink>
-  );
-}
+const navItems = [
+  { to: '/app/dashboard', icon: '🏠', title: 'Dashboard' },
+  { to: '/app/tasks', icon: '✅', title: 'To-Do List' },
+  { to: '/app/projects', icon: '📂', title: 'Projects' },
+  { to: '/app/calendar', icon: '📅', title: 'Calendar' },
+  { to: '/app/leetcode', icon: '🔥', title: 'LeetCode' },
+  { to: '/app/github', icon: '💻', title: 'GitHub' }, // New GitHub Link
+  { to: '/app/bookshelf', icon: '📚', title: 'Bookshelf' },
+];
 
 function Sidebar() {
   return (
     <aside className={styles.sidebar}>
       <div className={styles.logo}>PT</div>
-      
       <nav className={styles.nav}>
-        <NavItem to="/" title="Dashboard">🏠</NavItem>
-        <NavItem to="/tasks" title="To-Do List">✅</NavItem>
-        <NavItem to="/calendar" title="Calendar">📅</NavItem>
-        <NavItem to="/projects" title="Projects">🗂️</NavItem>
-        <NavItem to="/leetcode" title="LeetCode Stats">💻</NavItem>
-        <NavItem to="/bookshelf" title="Bookshelf">📚</NavItem>
+        {navItems.map(item => (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}
+            end={item.to === '/app/dashboard'}
+          >
+            <span className={styles.icon}>{item.icon}</span>
+            <span className={styles.tooltip}>{item.title}</span>
+          </NavLink>
+        ))}
       </nav>
-      
       <div className={styles.footer}>
-        <NavItem to="/settings" title="Settings">⚙️</NavItem>
+        <NavLink
+          to="/app/settings"
+          className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}
+        >
+          <span className={styles.icon}>⚙️</span>
+          <span className={styles.tooltip}>Settings</span>
+        </NavLink>
       </div>
     </aside>
   );

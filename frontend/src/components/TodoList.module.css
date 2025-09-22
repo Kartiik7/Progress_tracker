@@ -1,206 +1,171 @@
-.container {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    max-width: 800px;
+.page {
+    padding: 2rem;
+    color: var(--text-primary);
+    max-width: 900px;
     margin: 0 auto;
 }
 
 .header {
-    font-size: 1.875rem;
-    /* text-3xl */
-    font-weight: 700;
-    color: white;
-}
-
-.card {
-    background-color: #1f2937;
-    /* gray-800 */
-    padding: 1.5rem;
-    border-radius: 0.5rem;
-    /* rounded-lg */
-    border: 1px solid #374151;
-    /* gray-700 */
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    color: var(--text-bright);
 }
 
 .tabs {
     display: flex;
-    border-bottom: 1px solid #374151;
-    /* gray-700 */
+    gap: 0.5rem;
     margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.tab, .activeTab {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px; /* Align with the container's border */
 }
 
 .tab {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    background: none;
-    color: #9ca3af;
-    /* gray-400 */
-    font-weight: 600;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
-    /* Aligns with the bottom border */
-    transition: color 0.2s, border-color 0.2s;
+    color: var(--text-secondary);
 }
 
 .tab:hover {
-    color: #e5e7eb;
-    /* gray-200 */
+    color: var(--text-primary);
 }
 
 .activeTab {
-    color: #22d3ee;
-    /* cyan-400 */
-    border-bottom-color: #22d3ee;
-    /* cyan-400 */
+    color: var(--accent-primary);
+    border-color: var(--accent-primary);
 }
 
 .form {
     display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    align-items: center;
+}
+
+.input, .dateInput {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-secondary);
+    border-radius: 0.5rem;
+    color: var(--text-primary);
+    outline: none;
+    transition: box-shadow 0.2s, border-color 0.2s;
+    font-size: 1rem;
 }
 
 .input {
     flex-grow: 1;
-    padding: 0.75rem;
-    background-color: #374151;
-    /* gray-700 */
-    border-radius: 0.375rem;
-    /* rounded-md */
-    border: 1px solid #4b5563;
-    /* gray-600 */
-    color: white;
-    outline: none;
-    transition: box-shadow 0.2s, border-color 0.2s;
 }
 
-.input:focus {
-    border-color: #22d3ee;
-    /* cyan-400 */
-    box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.4);
+.dateInput {
+    width: auto;
+    color-scheme: dark; /* Improves date picker appearance in dark themes */
 }
 
-.addButton {
-    padding: 0.5rem 1.5rem;
-    background-color: #0891b2;
-    /* cyan-600 */
-    border-radius: 0.375rem;
-    /* rounded-md */
+.input:focus, .dateInput:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 25%, transparent);
+}
+
+.button {
+    padding: 0.75rem 1.5rem;
+    background-color: var(--accent-primary);
+    color: #fff;
     font-weight: 600;
-    transition: background-color 0.2s;
-    cursor: pointer;
     border: none;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 80px;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
-.addButton:hover {
-    background-color: #06b6d4;
-    /* cyan-500 */
-}
-
-.addButton:disabled {
-    background-color: #4b5563;
-    /* gray-600 */
-    cursor: not-allowed;
-}
-
-.spinner {
-    animation: spin 1s linear infinite;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-top-color: white;
-    border-radius: 50%;
-    width: 1rem;
-    height: 1rem;
+.button:hover {
+    background-color: var(--accent-primary-hover);
 }
 
 .taskList {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    min-height: 200px;
 }
 
 .taskItem {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 0.75rem;
-    background-color: rgba(55, 65, 81, 0.5);
-    /* gray-700/50 */
-    padding: 0.75rem;
-    border-radius: 0.375rem;
-    /* rounded-md */
-    transition: background-color 0.2s;
+    background-color: var(--bg-secondary);
+    padding: 1rem 1.25rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+    transition: background-color 0.2s, border-color 0.2s;
 }
 
 .taskItem:hover {
-    background-color: #374151;
-    /* gray-700 */
+    background-color: var(--bg-tertiary);
+    border-color: #4b5563;
+}
+
+.taskContent {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.taskInfo {
+    display: flex;
+    flex-direction: column;
 }
 
 .checkbox {
-    width: 1.125rem;
-    height: 1.125rem;
-    border-radius: 0.25rem;
-    background-color: #4b5563;
-    /* gray-600 */
-    border-color: #6b7280;
-    /* gray-500 */
-    color: #0891b2;
-    /* cyan-600 */
+    width: 1.25rem;
+    height: 1.25rem;
     cursor: pointer;
     flex-shrink: 0;
-}
-
-.taskTitle {
-    flex-grow: 1;
-    color: #d1d5db;
-    /* gray-300 */
+    accent-color: var(--accent-primary);
 }
 
 .completed {
     text-decoration: line-through;
-    color: #6b7280;
-    /* gray-500 */
+    color: var(--text-secondary);
+}
+
+.dueDate {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
 }
 
 .deleteButton {
     background: none;
     border: none;
-    color: #6b7280;
-    /* gray-500 */
-    font-size: 1.5rem;
-    font-weight: bold;
+    color: var(--text-secondary);
     cursor: pointer;
-    padding: 0 0.5rem;
-    opacity: 0;
-    transition: opacity 0.2s, color 0.2s;
-}
-
-.taskItem:hover .deleteButton {
-    opacity: 1;
+    font-size: 1.25rem;
+    transition: color 0.2s, transform 0.2s;
+    padding: 0.25rem;
+    border-radius: 50%;
 }
 
 .deleteButton:hover {
-    color: #ef4444;
-    /* red-500 */
+    color: var(--danger);
+    transform: scale(1.1);
 }
 
-.loadingText,
-.emptyText {
+.emptyState {
     text-align: center;
-    padding: 2rem;
-    color: #6b7280;
-    /* gray-500 */
+    color: var(--text-secondary);
+    padding: 3rem;
+    background-color: var(--bg-secondary);
+    border: 1px dashed var(--border-color);
+    border-radius: 0.5rem;
 }
 
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}

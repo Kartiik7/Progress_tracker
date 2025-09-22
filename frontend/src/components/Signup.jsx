@@ -1,36 +1,40 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import styles from './Auth.module.css'
-import { signup as signupApi } from '../api/auth'
-import { useAuth } from '../context/useAuth'
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import styles from './Auth.module.css';
+import { signup as signupApi } from '../api/auth';
+import { useAuth } from '../context/useAuth';
 
 export default function Signup() {
-  const { login, loading } = useAuth()
-  const navigate = useNavigate()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirm, setConfirm] = useState('')
-  const [message, setMessage] = useState('')
-  const [error, setError] = useState('')
+  const { login, loading } = useAuth();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
   const onSubmit = async (e) => {
-    e.preventDefault()
-    setError('')
-    setMessage('')
+    e.preventDefault();
+    setError('');
+    setMessage('');
     if (password !== confirm) {
-      setError('Passwords do not match')
-      return
+      setError('Passwords do not match');
+      return;
     }
     try {
-      await signupApi(email, password)
-      setMessage('Account created successfully')
-      // Optionally login automatically
-  await login(email, password)
-  navigate('/')
+      await signupApi(email, password);
+      // Automatically log the user in after successful signup
+      const ok = await login(email, password);
+      if (ok) {
+        navigate('/app'); // Redirect to the main app dashboard
+      } else {
+        setMessage('Account created! Please log in.');
+        navigate('/login');
+      }
     } catch (e) {
-      setError(e?.response?.data?.message || 'Sign up failed')
+      setError(e?.response?.data?.message || 'Sign up failed');
     }
-  }
+  };
 
   return (
     <div className={styles.page}>
@@ -51,7 +55,7 @@ export default function Signup() {
               placeholder="you@example.com"
               type="email"
               value={email}
-              onChange={(e)=>setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               required
               autoComplete="email"
             />
@@ -64,7 +68,7 @@ export default function Signup() {
               placeholder="Create a password"
               type="password"
               value={password}
-              onChange={(e)=>setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="new-password"
             />
@@ -77,7 +81,7 @@ export default function Signup() {
               placeholder="Re-enter your password"
               type="password"
               value={confirm}
-              onChange={(e)=>setConfirm(e.target.value)}
+              onChange={(e) => setConfirm(e.target.value)}
               required
               autoComplete="new-password"
             />
@@ -90,11 +94,11 @@ export default function Signup() {
             </button>
           </div>
         </form>
-        <div className={styles.mutedRow} style={{ marginTop: 12 }}>
+        <div className={styles.mutedRow}>
           <span>Already have an account?</span>
           <Link className={styles.link} to="/login">Log in</Link>
         </div>
       </div>
     </div>
-  )
+  );
 }

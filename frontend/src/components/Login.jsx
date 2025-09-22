@@ -1,22 +1,21 @@
-import React, { useState } from 'react'
-import { useAuth } from '../context/useAuth'
-import styles from './Auth.module.css'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useState } from 'react';
+import { useAuth } from '../context/useAuth';
+import styles from './Auth.module.css';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Login() {
-  const { login, loading, error } = useAuth()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [localError, setLocalError] = useState('')
-  const navigate = useNavigate()
+  const { login, loading, error } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const onSubmit = async (e) => {
-    e.preventDefault()
-    setLocalError('')
-    const ok = await login(email, password)
-    if (!ok) return
-    navigate('/')
-  }
+    e.preventDefault();
+    const ok = await login(email, password);
+    if (ok) {
+      navigate('/app'); // Redirect to the main app dashboard
+    }
+  };
 
   return (
     <div className={styles.page}>
@@ -37,7 +36,7 @@ export default function Login() {
               placeholder="you@example.com"
               type="email"
               value={email}
-              onChange={(e)=>setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               required
               autoComplete="email"
             />
@@ -50,25 +49,24 @@ export default function Login() {
               placeholder="••••••••"
               type="password"
               value={password}
-              onChange={(e)=>setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="current-password"
             />
           </div>
-          {(error || localError) && (
-            <div className={styles.error}>{localError || error}</div>
-          )}
+          {error && <div className={styles.error}>{error}</div>}
           <div className={styles.actions}>
             <button disabled={loading} className={styles.buttonPrimary} type="submit">
               {loading ? 'Logging in…' : 'Log in'}
             </button>
           </div>
         </form>
-        <div className={styles.mutedRow} style={{ marginTop: 12 }}>
+        <div className={styles.mutedRow}>
           <span>Don’t have an account?</span>
           <Link className={styles.link} to="/signup">Create one</Link>
         </div>
       </div>
     </div>
-  )
+  );
 }
+

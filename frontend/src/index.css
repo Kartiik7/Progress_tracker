@@ -5,18 +5,18 @@
 :root {
   --font-sans: 'Inter', sans-serif;
   
-  --bg-primary: #F5EFE6;      /* Very dark, almost black for main background */
-  --bg-secondary: #7F8CAA;   /* Slightly lighter for cards and sidebars */
-  --bg-tertiary: #4f89df;    /* For hovered items, borders */
+  --bg-primary: #F5EFE6;      /* Beige for main background */
+  --bg-secondary: #7F8CAA;    /* Blue-gray for cards and sidebars */
+  --bg-tertiary: #A6B1C9;      /* Lighter blue-gray for hovered items */
 
-  --text-primary: #070808;   /* Light gray for primary text */
-  --text-secondary: #57626d; /* Muted gray for secondary text, subtitles */
-  --text-bright: #b16f6f;    /* Pure white for headings */
+  --text-primary: #070808;    /* Black for primary text */
+  --text-secondary: #57626d;  /* Muted gray for secondary text */
+  --text-bright: #b16f6f;      /* Reddish-brown for headings */
 
-  --accent-primary: #3f6bb3; /* A vibrant blue for buttons, links, highlights */
+  --accent-primary: #3f6bb3;  /* A vibrant blue for buttons, links, highlights */
   --accent-primary-hover: #2563EB;
   
-  --border-color: #293444;
+  --border-color: #D3D9E3;
 
   --success: #22c55e;
   --danger: #ef4444;
@@ -43,10 +43,10 @@ body {
   background: var(--bg-primary);
 }
 ::-webkit-scrollbar-thumb {
-  background: #2d3748;
+  background: #C4CCD9;
   border-radius: 5px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #4a5568;
+  background: var(--bg-secondary);
 }
 

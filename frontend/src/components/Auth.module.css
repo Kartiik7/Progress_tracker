@@ -1,15 +1,7 @@
-/* Dark, modern auth page styles shared by Login and Signup */
+/* Dark, modern auth page styles using the new design system */
 
 :root {
-  --bg: #0b0f1a;
-  --card: #121826;
-  --muted: #8b9bb4;
-  --text: #e6eef8;
-  --accent: #7c5cff; /* primary accent */
-  --accent-2: #22d3ee; /* cyan accent */
-  --danger: #ff6b6b;
-  --success: #22c55e;
-  --ring: rgba(124, 92, 255, 0.45);
+  /* This file will now inherit variables from index.css */
 }
 
 .page {
@@ -17,93 +9,97 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Removed padding from here to allow the background to fill the screen */
-  background: radial-gradient(1200px 600px at 20% 10%, rgba(124, 92, 255, 0.15), transparent 60%),
-    radial-gradient(1000px 600px at 80% 20%, rgba(34, 211, 238, 0.15), transparent 60%),
-    linear-gradient(180deg, #0b0f1a 0%, #0a0d17 100%);
-  color: var(--text);
+  padding: 2rem;
+  background-color: var(--bg-primary);
+  /* Optional: Add a subtle gradient effect */
+  background-image: radial-gradient(circle at 10% 20%, color-mix(in srgb, var(--accent-primary) 8%, transparent) 0, transparent 40%),
+    radial-gradient(circle at 90% 80%, color-mix(in srgb, var(--accent-primary) 8%, transparent) 0, transparent 40%);
+  color: var(--text-primary);
 }
 
 .card {
   width: 100%;
   max-width: 420px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01))
-      , var(--card);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
-  padding: 28px;
-  backdrop-filter: blur(6px);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  padding: 2rem;
+  backdrop-filter: blur(10px);
 }
 
 .header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 18px;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .logo {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, var(--accent) 0%, #a78bfa 100%);
+  width: 40px;
+  height: 40px;
+  border-radius: 0.75rem;
+  background: var(--accent-primary);
   display: grid;
   place-items: center;
   color: white;
   font-weight: 800;
-  letter-spacing: -0.02em;
+  font-size: 1.1rem;
 }
 
 .title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  color: aquamarine;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-bright);
 }
 
 .subtitle {
-  color: var(--muted);
-  font-size: 0.95rem;
-  margin-bottom: 18px;
+  color: var(--text-secondary);
+  font-size: 1rem;
 }
 
 .form {
   display: grid;
-  gap: 14px;
+  gap: 1rem;
 }
 
 .field {
   display: grid;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
 .label {
-  font-size: 0.9rem;
-  color: #b8c4d9;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
 }
 
 .input {
   width: 100%;
-  padding: 12px 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.08);
-  background: rgba(255,255,255,0.03);
-  color: var(--text);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+  background: color-mix(in srgb, var(--bg-primary) 50%, transparent);
+  color: var(--text-primary);
   outline: none;
-  transition: box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
+  transition: box-shadow 180ms ease, border-color 180ms ease;
+  font-size: 1rem;
+  box-sizing: border-box; /* Ensures consistent width */
 }
 
-.input::placeholder { color: #90a0b8; }
+.input::placeholder { 
+  color: var(--text-secondary); 
+}
 
 .input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 4px var(--ring);
-  background: rgba(255,255,255,0.05);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 25%, transparent);
 }
 
 .error {
   color: var(--danger);
-  font-size: 0.85rem;
+  font-size: 0.875rem;
 }
 
 .success {
@@ -112,45 +108,47 @@
 }
 
 .actions {
-  margin-top: 6px;
-  display: grid;
-  gap: 10px;
+  margin-top: 1rem;
 }
 
 .buttonPrimary {
   width: 100%;
   border: none;
-  border-radius: 12px;
-  padding: 12px 16px;
-  background: linear-gradient(135deg, var(--accent) 0%, #a78bfa 100%);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--accent-primary);
   color: white;
   font-weight: 700;
-  letter-spacing: 0.01em;
+  font-size: 1rem;
   cursor: pointer;
-  transition: transform 120ms ease, filter 180ms ease;
+  transition: background-color 180ms ease;
 }
 
-.buttonPrimary:hover { filter: brightness(1.05); }
-.buttonPrimary:active { transform: translateY(1px); }
-.buttonPrimary:disabled { opacity: 0.65; cursor: not-allowed; }
+.buttonPrimary:hover { 
+  background-color: var(--accent-primary-hover); 
+}
+
+.buttonPrimary:disabled { 
+  opacity: 0.6; 
+  cursor: not-allowed; 
+}
 
 .mutedRow {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  color: var(--muted);
-  font-size: 0.95rem;
+  margin-top: 1.5rem;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
 }
 
 .link {
-  color: #c7b7ff;
+  color: var(--accent-primary);
   text-decoration: none;
+  font-weight: 600;
+  margin-left: 0.25rem;
 }
 
-.link:hover { color: white; text-decoration: underline; }
-
-@media (max-width: 420px) {
-  .card { padding: 22px; border-radius: 14px; }
-  .title { font-size: 1.15rem; }
+.link:hover { 
+  text-decoration: underline; 
 }
+
 
