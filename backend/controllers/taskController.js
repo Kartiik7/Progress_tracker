@@ -14,8 +14,17 @@ exports.getTasks = async (req, res) => {
   try {
     const query = { userId: req.userId };
     if (req.query.category) query.category = req.query.category;
-    if (req.query.frequency) query.frequency = req.query.frequency; // Added this line
-    const tasks = await Task.find(query).sort({ createdAt: -1 }); // Sort by newest
+    if (req.query.frequency) query.frequency = req.query.frequency;
+    
+    // Add date range querying for the calendar
+    if (req.query.startDate && req.query.endDate) {
+      query.dueDate = {
+        $gte: new Date(req.query.startDate),
+        $lte: new Date(req.query.endDate)
+      };
+    }
+
+    const tasks = await Task.find(query).sort({ dueDate: 1 }); // Sort by due date
     res.json(tasks);
   } catch (err) {
     res.status(500).json({ message: err.message });
