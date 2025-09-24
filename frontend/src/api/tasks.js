@@ -1,4 +1,4 @@
-import api from './client'
+import { api } from './client'
 
 export const getTasks = (params = {}) => api.get('/tasks', { params }).then(r => r.data)
 export const createTask = (payload) => api.post('/tasks', payload).then(r => r.data)

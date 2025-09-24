@@ -8,6 +8,8 @@ exports.getProfile = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
+    // Ensure settings is always an object
+    if (!user.settings) user.settings = {};
     res.json(user);
   } catch (err) {
     res.status(500).json({ message: 'Server error while fetching profile.' });

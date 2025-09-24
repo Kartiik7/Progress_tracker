@@ -1,139 +1,107 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { getGithubStats } from '../api/github';
-import { getProfile } from '../api/user'; // Corrected import name
-import styles from './GitHubStats.module.css';
 import { Link } from 'react-router-dom';
+import styles from './GitHubStats.module.css';
 
 export default function GitHubStats() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        setLoading(true);
-        setError('');
-        
-        // First, get the user's profile to find their GitHub username
-        const profile = await getProfile();
-        const username = profile.settings?.githubUsername;
-
-        if (!username) {
-          setError("No GitHub username is set. Please add it in your settings.");
-          setLoading(false);
-          return;
-        }
-
-        // Then, fetch the stats for that username
-        const data = await getGithubStats(username);
-        setStats(data);
-      } catch (err) {
-        const errorMessage = err.response?.data?.message || 'An unexpected error occurred.';
-        setError(errorMessage);
-        console.error("Failed to fetch GitHub stats:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchStats();
+  const fetchStats = useCallback(async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const data = await getGithubStats();
+      setStats(data);
+    } catch (err) {
+      setError(err.response?.data?.message || 'An error occurred while fetching stats.');
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchStats();
+  }, [fetchStats]);
 
   const renderContent = () => {
     if (loading) {
-      return <SkeletonLoader />;
+      return <div className={styles.loading}>Fetching your GitHub stats...</div>;
     }
 
     if (error) {
-      return (
-        <div className={styles.emptyState}>
-          <h2>Error Fetching Stats</h2>
-          <p>{error}</p>
-          {error.includes("No GitHub username is set") && (
-            <Link to="/app/settings" className={styles.settingsLink}>
-              Update your settings
-            </Link>
-          )}
-        </div>
-      );
+        return (
+            <div className={styles.errorContainer}>
+                <h3>Error Fetching Stats</h3>
+                <p>{error}</p>
+                {error.includes("username is set") && (
+                     <Link to="/app/settings" className={styles.settingsLink}>
+                        Update your settings
+                    </Link>
+                )}
+            </div>
+        );
     }
-    
+
     if (!stats) {
-      return <div className={styles.emptyState}>Could not load stats.</div>;
+      return <div className={styles.empty}>No stats to display.</div>;
     }
 
-    return <StatsDisplay stats={stats} />;
-  };
+    const { profile, topLanguages, topRepos } = stats;
 
+    return (
+      <div className={styles.statsGrid}>
+        <div className={styles.profileCard}>
+          <img src={profile.avatar_url} alt={`${profile.name}'s avatar`} className={styles.avatar} />
+          <h2>{profile.name}</h2>
+          <p className={styles.bio}>{profile.bio}</p>
+          <div className={styles.profileStats}>
+            <span><strong>{profile.followers}</strong> Followers</span>
+            <span>·</span>
+            <span><strong>{profile.following}</strong> Following</span>
+            <span>·</span>
+            <span><strong>{profile.public_repos}</strong> Repos</span>
+          </div>
+          <a href={profile.url} target="_blank" rel="noopener noreferrer" className={styles.profileLink}>
+            View Profile on GitHub
+          </a>
+        </div>
+
+        <div className={styles.reposCard}>
+            <h3>Top Repositories</h3>
+            <ul>
+                {topRepos.map(repo => (
+                    <li key={repo.name}>
+                        <a href={repo.url} target="_blank" rel="noopener noreferrer">{repo.name}</a>
+                        <span>⭐ {repo.stars}</span>
+                    </li>
+                ))}
+            </ul>
+        </div>
+        
+        <div className={styles.langsCard}>
+            <h3>Top Languages</h3>
+            <ul>
+                {topLanguages.map(lang => (
+                    <li key={lang.name}>
+                       <span className={styles.langName}>{lang.name}</span>
+                       <span className={styles.langCount}>{lang.count} repos</span>
+                    </li>
+                ))}
+            </ul>
+        </div>
+      </div>
+    );
+  };
+  
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <h1 className={styles.title}>Your GitHub Stats</h1>
+        <h1>Your GitHub Stats</h1>
       </header>
-      <div className={styles.content}>
-        {renderContent()}
-      </div>
+      {renderContent()}
     </div>
   );
-}
-
-// --- UI Components ---
-
-function StatsDisplay({ stats }) {
-    const { user, topLanguages, topRepos } = stats;
-    return (
-        <>
-            <div className={styles.profileHeader}>
-                <img src={user.avatar_url} alt={`${user.login}'s avatar`} className={styles.avatar} />
-                <div className={styles.profileInfo}>
-                    <h2>{user.name}</h2>
-                    <p>@{user.login}</p>
-                    <div className={styles.profileStats}>
-                        <span>{user.followers} Followers</span>
-                        <span>·</span>
-                        <span>{user.following} Following</span>
-                         <span>·</span>
-                        <span>{user.public_repos} Repositories</span>
-                    </div>
-                </div>
-            </div>
-
-            <div className={styles.section}>
-                <h3>Top Languages</h3>
-                <div className={styles.languageGrid}>
-                    {Object.entries(topLanguages).map(([lang, bytes]) => (
-                        <div key={lang} className={styles.langItem}>{lang}</div>
-                    ))}
-                </div>
-            </div>
-
-            <div className={styles.section}>
-                <h3>Top Repositories</h3>
-                <div className={styles.repoGrid}>
-                    {topRepos.map(repo => (
-                        <a href={repo.html_url} key={repo.id} target="_blank" rel="noopener noreferrer" className={styles.repoCard}>
-                            <h4>{repo.name}</h4>
-                            <p>{repo.description}</p>
-                            <div className={styles.repoStats}>
-                                <span>⭐ {repo.stargazers_count}</span>
-                                <span>{repo.language}</span>
-                            </div>
-                        </a>
-                    ))}
-                </div>
-            </div>
-        </>
-    );
-}
-
-
-function SkeletonLoader() {
-    return (
-        <div>
-            <div className={`${styles.profileHeader} ${styles.skeleton}`}></div>
-            <div className={`${styles.section} ${styles.skeleton} ${styles.marginTop}`}></div>
-            <div className={`${styles.section} ${styles.skeleton} ${styles.marginTop}`}></div>
-        </div>
-    );
 }
 

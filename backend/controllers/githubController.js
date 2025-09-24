@@ -54,17 +54,22 @@ exports.getGithubStats = async (req, res) => {
                 language: repo.language,
             }));
 
-        // Send the final, formatted data object to the frontend.
+       // Send the final, formatted data object to the frontend.
         res.json({
+        profile: {
             username: userData.login,
             name: userData.name,
-            avatarUrl: userData.avatar_url,
+            avatar_url: userData.avatar_url,
+            bio: userData.bio,
             followers: userData.followers,
             following: userData.following,
-            publicRepos: userData.public_repos,
-            topLanguages,
-            topRepos,
+            public_repos: userData.public_repos,
+            url: userData.html_url,
+        },
+        topLanguages,
+        topRepos,
         });
+
 
     } catch (error) {
         if (error.response && error.response.status === 404) {

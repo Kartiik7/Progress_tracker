@@ -1,4 +1,4 @@
-import api from './client';
+import { api } from './client';
 
 // Fetch the current user's profile information
 export const getProfile = () => api.get('/user/profile').then(r => r.data);
@@ -15,4 +15,3 @@ export const changePassword = (currentPassword, newPassword) => {
 export const verifyPassword = (password) => {
   return api.post('/user/verify-password', { password }).then(r => r.data);
 };
-
