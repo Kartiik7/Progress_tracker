@@ -14,28 +14,27 @@ const dashboardRoutes = require('./routes/dashboard');
 
 const app = express();
 
-// --- CORS Configuration ---
-// Define which frontend URLs are allowed to access this backend
-const allowedOrigins = [
-  'http://localhost:5173', // Your local frontend
-  'https://stufyflow.netlify.app' // Your deployed frontend
+// --- NEW: CORS Configuration ---
+// This whitelist contains all the URLs that are allowed to make requests to your API.
+const whitelist = [
+    'http://localhost:5173', // Your local frontend for development
+    'https://stufyflow.netlify.app', // Your deployed frontend on Netlify
+    'https://studflow.netlify.app'  
 ];
 
 const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin || whitelist.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
     }
-    return callback(null, true);
-  }
 };
 
 app.use(cors(corsOptions));
 // --- End of CORS Configuration ---
-
 
 app.use(express.json());
 
@@ -55,3 +54,4 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })
   .catch(err => console.error(err));
+
