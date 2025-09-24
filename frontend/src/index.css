@@ -1,26 +1,50 @@
 /* Import Google Font */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-/* Define the new color palette and base styles using CSS variables */
+/* --- Light Theme (Default) --- */
 :root {
   --font-sans: 'Inter', sans-serif;
   
-  --bg-primary: #F5EFE6;      /* Main background */
-  --bg-secondary: #E8DFCA;    /* Card and component backgrounds */
-  --bg-tertiary: #AEBDCA;     /* Hover states */
+  --bg-primary: #F5EFE6;
+  --bg-secondary: #E8DFCA;
+  --bg-tertiary: #AEBDCA;
 
-  --text-primary: #1E2022;     /* Dark text for primary content */
-  --text-secondary: #52616B;   /* Muted gray for secondary text */
-  --text-bright: #C92C6D;      /* Accent color for headings */
+  --text-primary: #1E2022;
+  --text-secondary: #52616B;
+  --text-bright: #C92C6D;
 
-  --accent-primary: #4A69BD;  /* A vibrant blue for buttons, links */
+  --accent-primary: #4A69BD;
   --accent-primary-hover: #3B528E;
   
   --border-color: #C9D6DF;
 
-  --success: #22c55e;
-  --danger: #ef4444;
+  --success: #16a34a;
+  --danger: #dc2626;
+  --warning: #f59e0b; /* New accent */
+  --info: #3b82f6;    /* New accent */
 }
+
+/* --- NEW: Multi-Colored Dark Theme --- */
+html[data-theme='dark'] {
+  --bg-primary: #0d1117;       /* Very dark, almost black background */
+  --bg-secondary: #161b22;    /* Slightly lighter for cards */
+  --bg-tertiary: #21262d;     /* Lighter gray for hovers */
+
+  --text-primary: #e6edf3;     /* Off-white for main text */
+  --text-secondary: #8b949e;   /* Muted gray for secondary text */
+  --text-bright: #ffffff;      /* Pure white for headings */
+
+  --accent-primary: #58a6ff;  /* A brighter, more vibrant blue */
+  --accent-primary-hover: #80b6ff;
+  
+  --border-color: #30363d;
+
+  --success: #34d399;        /* A modern, bright green */
+  --danger: #f87171;         /* A softer, more readable red */
+  --warning: #facc15;        /* A vibrant yellow */
+  --info: #7dd3fc;           /* A light, friendly blue */
+}
+
 
 /* Apply base styles and Tailwind directives */
 @tailwind base;
@@ -39,6 +63,7 @@ body {
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s, color 0.3s; /* Smooth theme transition */
 }
 
 /* --- Core Application Layout --- */
@@ -62,10 +87,9 @@ body {
   background: var(--bg-primary);
 }
 ::-webkit-scrollbar-thumb {
-  background: #C9D6DF;
+  background: var(--bg-tertiary);
   border-radius: 5px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #AEBDCA;
+  background-color: var(--accent-primary);
 }
-

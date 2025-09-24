@@ -6,6 +6,11 @@ export const getProfile = () => api.get('/user/profile').then(r => r.data);
 // Update the user's settings (e.g., linked accounts)
 export const updateProfile = (settings) => api.put('/user/profile', settings).then(r => r.data);
 
+// --- NEW: Request an email change ---
+export const requestEmailChange = (newEmail, password) => {
+  return api.post('/user/request-email-change', { newEmail, password }).then(r => r.data);
+};
+
 // Change the user's password
 export const changePassword = (currentPassword, newPassword) => {
   return api.post('/user/change-password', { currentPassword, newPassword }).then(r => r.data);

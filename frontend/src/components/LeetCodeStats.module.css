@@ -3,7 +3,6 @@
   padding: 2rem;
   height: 100%;
   overflow-y: auto;
-  background: var(--bg-primary); /* Use theme background */
 }
 
 .header {
@@ -37,11 +36,12 @@
   flex-direction: column;
   gap: 0.5rem;
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  border: 1px solid var(--border-color);
 }
 
 .statCard:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
 }
 
 .statTitle {
@@ -83,128 +83,74 @@
   transition: width 0.5s ease-in-out;
 }
 
-
-/* --- NEW HEATMAP / CONTRIBUTION GRAPH STYLES --- */
+/* --- FINAL HEATMAP STYLES --- */
 .heatmapWrapper {
   background-color: var(--bg-secondary);
   border-radius: 0.75rem;
   padding: 1.5rem;
   margin-top: 2rem;
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
 }
 
 .heatmapTitle {
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--text-bright);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .heatmapContainer {
-  overflow-x: auto; /* Contains scrolling to the graph area */
-  padding-bottom: 1rem;
-}
-
-.heatmap {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.heatmapMonths {
-  display: grid;
-  grid-auto-flow: column;
-  grid-template-columns: repeat(53, 1fr); /* 53 weeks */
-  gap: 4px;
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  padding-left: 30px; /* Space for day labels */
-  text-align: left;
-}
-
-.heatmapBody {
-  display: flex;
-  gap: 10px;
+  display: block; /* changed inline-block to block for separate months */
 }
 
 .heatmapDays {
   display: grid;
-  grid-template-rows: repeat(7, 14px); /* Cell height */
-  gap: 4px; /* Matches cell gap */
-  font-size: 0.75rem;
+  grid-template-columns: repeat(7, 14px);
+  gap: 4px;
+  font-size: 0.7rem;
   color: var(--text-secondary);
-  align-items: center;
-}
-.heatmapDays span:nth-child(odd) {
-  visibility: hidden;
+  margin-bottom: 4px;
 }
 
-
-.heatmapGrid {
+.heatmapCells {
   display: grid;
-  grid-auto-flow: column;
-  grid-template-rows: repeat(7, 1fr); 
-  grid-gap: 4px;
+  grid-template-columns: repeat(7, 14px);
+  grid-auto-rows: 14px;
+  gap: 4px;
 }
 
 .heatmapCell {
   width: 14px;
   height: 14px;
   border-radius: 3px;
-  transition: background-color 0.2s;
+  background-color: var(--bg-tertiary);
+  border: 1px solid color-mix(in srgb, var(--border-color) 50%, transparent);
+}
+.heatmapCell:not([style*="visibility: hidden"]):hover {
+  border: 1px solid var(--text-primary);
 }
 
-/* New green color scale for heatmap */
-.level0 { background-color: var(--border-color); }
-.level1 { background-color: #0e4429; }
-.level2 { background-color: #006d32; }
-.level3 { background-color: #26a641; }
-.level4 { background-color: #39d353; }
+/* --- Theme-Aware Color Levels --- */
+.level0 { background-color: var(--bg-tertiary); }
 
+html[data-theme='light'] .level1 { background-color: #9be9a8; border: none; }
+html[data-theme='light'] .level2 { background-color: #40c463; border: none; }
+html[data-theme='light'] .level3 { background-color: #30a14e; border: none; }
+html[data-theme='light'] .level4 { background-color: #216e39; border: none; }
+
+html[data-theme='dark'] .level1 { background-color: #0e4429; border: none; }
+html[data-theme='dark'] .level2 { background-color: #006d32; border: none; }
+html[data-theme='dark'] .level3 { background-color: #26a641; border: none; }
+html[data-theme='dark'] .level4 { background-color: #39d353; border: none; }
 
 /* --- States (Loading, Error, Empty) --- */
 .emptyState, .loading {
-  text-align: center;
-  padding: 4rem 1rem;
-  background-color: var(--bg-secondary);
-  border-radius: 0.75rem;
-  color: var(--text-secondary);
+  text-align: center; padding: 4rem 1rem; background-color: var(--bg-secondary); border-radius: 0.75rem; color: var(--text-secondary);
 }
-
-.emptyState h2 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-bright);
-}
-
-.emptyState p {
-    margin-top: 0.5rem;
-}
-
-.settingsLink {
-  display: inline-block;
-  margin-top: 1.5rem;
-  padding: 0.75rem 1.5rem;
-  background-color: var(--accent-primary);
-  color: white;
-  border-radius: 0.5rem;
-  text-decoration: none;
-  font-weight: 600;
-  transition: background-color 0.2s;
-}
-
-.settingsLink:hover {
-  background-color: var(--accent-primary-hover);
-}
-
-.skeleton {
-  background-color: var(--border-color);
-  animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  min-height: 120px;
-}
-
-@keyframes pulse {
-  50% {
-    opacity: .5;
-  }
-}
-
+.emptyState h2 { font-size: 1.5rem; font-weight: 700; color: var(--text-bright); }
+.emptyState p { margin-top: 0.5rem; }
+.settingsLink { display: inline-block; margin-top: 1.5rem; padding: 0.75rem 1.5rem; background-color: var(--accent-primary); color: white; border-radius: 0.5rem; text-decoration: none; font-weight: 600; transition: background-color 0.2s; }
+.settingsLink:hover { background-color: var(--accent-primary-hover); }
+.skeleton { background-color: var(--bg-tertiary); border: 1px solid var(--border-color); animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; min-height: 120px; }
+@keyframes pulse { 50% { opacity: .5; } }

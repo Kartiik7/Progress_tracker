@@ -92,7 +92,7 @@ function StatsDisplay({ stats }) {
         <DifficultyCard title="Medium" solved={mediumSolved} total={totalMedium} color="#facc15" />
         <DifficultyCard title="Hard" solved={hardSolved} total={totalHard} color="#f87171" />
       </div>
-      <Heatmap data={submissionCalendar} />
+      <Heatmap data={submissionCalendar || {}} />
     </>
   );
 }
@@ -121,109 +121,96 @@ function DifficultyCard({ title, solved, total, color }) {
   );
 }
 
-// --- NEW AND IMPROVED HEATMAP COMPONENT ---
-
-const getContributionLevel = (count, max) => {
-    if (count === 0) return styles.level0;
-    const percentage = count / max;
-    if (percentage > 0.7) return styles.level4;
-    if (percentage > 0.5) return styles.level3;
-    if (percentage > 0.3) return styles.level2;
-    return styles.level1;
-};
-
-const formatDate = (date) => {
-    return date.toISOString().split('T')[0];
-}
-
+// --- FINAL, FIXED HEATMAP COMPONENT ---
 function Heatmap({ data = {} }) {
+    const contributionsMap = new Map(Object.entries(data).map(([ts, count]) => {
+        const date = new Date(parseInt(ts, 10) * 1000).toISOString().split('T')[0];
+        return [date, count];
+    }));
+
+    const maxContribution = Math.max(...contributionsMap.values(), 1);
+
+    const getLevelClass = (count) => {
+        if (count === 0) return styles.level0;
+        const p = count / maxContribution;
+        if (p > 0.7) return styles.level4;
+        if (p > 0.5) return styles.level3;
+        if (p > 0.3) return styles.level2;
+        return styles.level1;
+    };
+
     const today = new Date();
-    const endDate = new Date(today);
+    const endDate = today;
     const startDate = new Date(today);
     startDate.setFullYear(today.getFullYear() - 1);
-    
-    const contributionsMap = new Map();
-    for (const [timestamp, count] of Object.entries(data)) {
-        const date = new Date(parseInt(timestamp, 10) * 1000);
-        contributionsMap.set(formatDate(date), count);
-    }
-    const maxContribution = Math.max(...contributionsMap.values(), 1); // Avoid division by zero
+    startDate.setDate(today.getDate() + 1);
 
-    const weeks = [];
+    const yearData = [];
     let currentDate = new Date(startDate);
-    // Align start date to the previous Sunday
-    currentDate.setDate(currentDate.getDate() - startDate.getDay());
 
-    for (let i = 0; i < 53; i++) {
-        const week = [];
-        for (let j = 0; j < 7; j++) {
-            const dateStr = formatDate(currentDate);
-            const count = contributionsMap.get(dateStr) || 0;
-            const isVisible = currentDate >= startDate && currentDate <= endDate;
+    // Push days with correct alignment
+    while (currentDate <= endDate) {
+        const dateStr = currentDate.toISOString().split('T')[0];
+        const count = contributionsMap.get(dateStr) || 0;
 
-            week.push({
-                date: dateStr,
-                count: count,
-                levelClass: getContributionLevel(count, maxContribution),
-                visible: isVisible,
-            });
-            currentDate.setDate(currentDate.getDate() + 1);
-        }
-        weeks.push(week);
+        yearData.push({
+            date: dateStr,
+            count,
+            levelClass: getLevelClass(count),
+        });
+
+        currentDate.setDate(currentDate.getDate() + 1);
     }
 
-    const monthLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const monthLabelPositions = weeks.reduce((acc, week, i) => {
-      const firstDayOfMonth = new Date(week[0].date);
-      const month = firstDayOfMonth.getMonth();
-      if (!acc.some(item => item.month === month)) {
-        acc.push({ month, index: i });
-      }
-      return acc;
-    }, []);
+    // Split yearData into months
+    const months = [];
+    let monthStart = 0;
+    for (let i = 0; i < yearData.length; i++) {
+        const day = yearData[i];
+        const dayMonth = new Date(day.date).getMonth();
+        const nextDayMonth = yearData[i + 1]?.date ? new Date(yearData[i + 1].date).getMonth() : dayMonth;
+        if (dayMonth !== nextDayMonth || i === yearData.length - 1) {
+            months.push(yearData.slice(monthStart, i + 1));
+            monthStart = i + 1;
+        }
+    }
+
+    const monthLabels = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
     return (
-      <div className={styles.heatmapWrapper}>
-        <h3 className={styles.heatmapTitle}>Submission Heatmap (Last Year)</h3>
-        <div className={styles.heatmapContainer}>
-          <div className={styles.heatmap}>
-            <div className={styles.heatmapMonths}>
-              {monthLabelPositions.map(({ month, index }) => (
-                <div key={month} style={{ gridColumn: index + 1 }}>
-                  {monthLabels[month]}
-                </div>
-              ))}
+        <div className={styles.heatmapWrapper}>
+            <h3 className={styles.heatmapTitle}>Submission Heatmap (Last Year)</h3>
+            <div className={styles.heatmapContainer}>
+                {months.map((monthData, idx) => {
+                    const monthName = monthLabels[new Date(monthData[0].date).getMonth()];
+                    const emptyCells = new Array(new Date(monthData[0].date).getDay()).fill(null);
+
+                    return (
+                        <div key={idx} style={{ marginBottom: '1.5rem' }}>
+                            <div style={{ fontWeight: '700', marginBottom: '0.5rem' }}>{monthName}</div>
+                            <div className={styles.heatmapDays}>
+                                <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+                            </div>
+                            <div className={styles.heatmapCells}>
+                                {emptyCells.map((_, i) => (
+                                    <div key={`empty-${i}`} className={`${styles.heatmapCell} ${styles.level0}`} />
+                                ))}
+                                {monthData.map(day => (
+                                    <div
+                                        key={day.date}
+                                        className={`${styles.heatmapCell} ${day.levelClass}`}
+                                        title={`${day.count} submissions on ${day.date}`}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    )
+                })}
             </div>
-            <div className={styles.heatmapBody}>
-              <div className={styles.heatmapDays}>
-                <span>Mon</span>
-                <span></span>
-                <span>Wed</span>
-                <span></span>
-                <span>Fri</span>
-                <span></span>
-                <span></span>
-              </div>
-              <div className={styles.heatmapGrid}>
-                {weeks.map((week, weekIndex) => (
-                  <div key={weekIndex}>
-                    {week.map((day) => (
-                      <div
-                        key={day.date}
-                        className={`${styles.heatmapCell} ${day.visible ? day.levelClass : ''}`}
-                        title={day.visible ? `${day.count} submissions on ${day.date}` : ''}
-                        style={{ visibility: day.visible ? 'visible' : 'hidden' }}
-                      />
-                    ))}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
     );
 }
+
 
 
 function SkeletonLoader() {
@@ -238,4 +225,3 @@ function SkeletonLoader() {
     </div>
   );
 }
-
